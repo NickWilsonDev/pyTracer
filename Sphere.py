@@ -10,7 +10,7 @@ class Sphere(object):
         self.opacity = opacity
         self.color   = color
 
-    def hit(self):
+    def hit(self, ray):
         """ We need origin of the ray, direction of the ray, and center of
             sphere.
         """
