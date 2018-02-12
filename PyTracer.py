@@ -11,6 +11,10 @@
 """
 import sys
 import util as util
+import numpy as np
+
+#Black rgb
+BACKGROUND_COLOR = np.asarray(0, 0, 0)
 
 arguments = len(sys.argv) - 1
 if arguments != 3:
