@@ -65,3 +65,7 @@ def render():
 
                 else:
                     pixels[j * image_width + i] = BACKGROUND_COLOR
+
+    write_image(pixels)
+
+render()
