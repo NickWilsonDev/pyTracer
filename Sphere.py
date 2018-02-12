@@ -14,7 +14,7 @@ class Sphere(object):
         """ We need origin of the ray, direction of the ray, and center of
             sphere.
         """
-        
+        #need to add more intersection
         # move sphere to origin to make math easier
         center_sphere = np.array(self.center)
         center_sphere = np.subtract(center_sphere, center_sphere)
