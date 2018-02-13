@@ -12,9 +12,10 @@
 import sys
 import util as util
 import numpy as np
+from Ray import Ray
 
 #Black rgb
-BACKGROUND_COLOR = np.asarray([0, 0, 0])
+BACKGROUND_COLOR = np.asarray([255, 255, 255])
 CAMERA_POSITION = np.asarray([0, 0, -1])
 
 arguments = len(sys.argv) - 1
@@ -40,7 +41,7 @@ print "Light list :: " + str(light_list)
 #define window whose surface is covered with pixels
 # basically an array of (r, g, b) values, may need map to world function
 rgb = np.asarray([0, 0, 0])
-pixels = np.full((image_width, image_height), rgb)
+pixels = np.empty([image_width, image_height, 3], dtype = int)
 """
 for each pixel
     shoot a ray towards the objects from the center of the pixel
@@ -53,19 +54,24 @@ for each pixel
     set the pixel color to black
 """
 def render():
-    for j in image_height:
-        for i in image_width:
+    # distance from ray origin to hitpoint
+    distance = 0.0
+    for j in range(0, image_height):
+        for i in range(0, image_width):
             for shape in shape_list:
                 # build primary ray
                 # does it intersect with any objects
                 ray = Ray(CAMERA_POSITION, np.subtract(np.asarray([i, j, 0]), CAMERA_POSITION))
                 if shape.hit(ray, distance):
                     #set pixel point to color of sphere
-                    pixels[j * image_width + i] = shape.color
-
+                    #print j * image_width + i
+                    #pixels[j * image_width + i - 1] = shape.color
+                    pixels[i][j] = shape.color
+                    print "hit---------------"
                 else:
-                    pixels[j * image_width + i] = BACKGROUND_COLOR
-
-    write_image(pixels)
+                    #print j * image_width + i
+                    #pixels[j * image_width + i - 1] = BACKGROUND_COLOR
+                    pixels[i][j] = BACKGROUND_COLOR
+    util.write_image(pixels)
 
 render()

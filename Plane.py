@@ -8,7 +8,7 @@ class Plane(object):
         self.normal  = normal
         self.color   = color
 
-    def hit(self):
+    def hit(self, ray, distance):
         pass
 
     def to_string(self):

@@ -1,6 +1,7 @@
 # Sphere.py
 """ Class models a sphere shape. """
 import numpy as np
+import math
 
 class Sphere(object):
 
@@ -18,12 +19,12 @@ class Sphere(object):
         answers = []
         discriminant = b * b - 4 * a * c
         if discriminant < 0:
-            answers[0] = False
+            answers.append(False)
             return answers
         elif discriminant == 0:
-            answers[0] = True
-            answers[1] = -0.5 * b / a
-            answers[2] = answers[0]
+            answers.append(True)
+            answers.append(-0.5 * b / a)
+            answers.append(answers[1])
             return answers
         else:
             q = 0.0
@@ -31,9 +32,9 @@ class Sphere(object):
                 q = -0.5 * (b + math.sqrt(discriminant))
             elif b < 0:
                 q = -0.5 * (b - math.sqrt(discriminant))
-            answers[0] = True
-            answers[1] = q / a;
-            answers[2] = c / q;
+            answers.append(True)
+            answers.append(q / a);
+            answers.append(c / q);
         return answers
 
     def hit(self, ray, distance):
@@ -45,10 +46,10 @@ class Sphere(object):
         center_sphere = self.center
         L = np.subtract(ray.origin, self.center)
         a = np.dot(ray.direction, ray.direction)
-        b = 2 * np.dot(new_ray_origin, direction_ray)
+        b = 2 * np.dot(ray.direction, L)
 
         c = np.dot(L, L) - (self.radius ** 2)
-        answers = solve_quadratic(a, b, c)
+        answers = self.solve_quadratic(a, b, c)
         if not answers[0]:
             return False
         
