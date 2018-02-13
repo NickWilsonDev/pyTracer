@@ -9,7 +9,28 @@ class Sphere(object):
         self.radius  = radius
         self.opacity = opacity
         self.color   = color
+        self.radius_squared = self.radius * self.radius
 
+    def solve_quadratic(self, a, b, c):
+        answers = []
+        discriminant = b * b - 4 * a * c
+        if discriminant < 0:
+            answers[0] = False
+            return answers
+        elif discriminant == 0:
+            answers[0] = True
+            answers[1] = -0.5 * b / a
+            answers[2] = answers[0]
+            return answers
+        else:
+            q = 0.0
+            if b > 0:
+                q = -0.5 * (b + math.sqrt(discriminant))
+            elif b < 0:
+                q = -0.5 * (b - math.sqrt(discriminant))
+            answers[0] = True
+            answers[1] = q / a;
+            answers[2] = c / q;
     def hit(self, ray):
         """ We need origin of the ray, direction of the ray, and center of
             sphere.
