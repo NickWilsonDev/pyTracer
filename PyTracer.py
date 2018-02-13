@@ -14,8 +14,8 @@ import util as util
 import numpy as np
 
 #Black rgb
-BACKGROUND_COLOR = np.asarray(0, 0, 0)
-CAMERA_POSITION = np.asarray(0, 0, -1)
+BACKGROUND_COLOR = np.asarray([0, 0, 0])
+CAMERA_POSITION = np.asarray([0, 0, -1])
 
 arguments = len(sys.argv) - 1
 if arguments != 3:
@@ -24,8 +24,8 @@ if arguments != 3:
 
 
 """ set command line args to vars """
-image_width = sys.argv[1]
-image_height = sys.argv[2]
+image_width = int(sys.argv[1])
+image_height = int(sys.argv[2])
 sourcefile = sys.argv[3]
 
 # parse file and load up objects in obj_list and light_list
@@ -59,7 +59,7 @@ def render():
                 # build primary ray
                 # does it intersect with any objects
                 ray = Ray(CAMERA_POSITION, np.subtract(np.asarray([i, j, 0]), CAMERA_POSITION))
-                if shape.hit(ray):
+                if shape.hit(ray, distance):
                     #set pixel point to color of sphere
                     pixels[j * image_width + i] = shape.color
 

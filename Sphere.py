@@ -5,11 +5,14 @@ import numpy as np
 class Sphere(object):
 
     def __init__(self, center, radius, opacity, color):
-        self.center  = center
+        print "------------Sphere----------"
+        print center
+        print radius
+        self.center  = np.asarray(center)
         self.radius  = radius
         self.opacity = opacity
-        self.color   = color
-        self.radius_squared = self.radius * self.radius
+        self.color   = np.asarray(color)
+        self.radius_squared = float(self.radius * self.radius)
 
     def solve_quadratic(self, a, b, c):
         answers = []
@@ -31,23 +34,38 @@ class Sphere(object):
             answers[0] = True
             answers[1] = q / a;
             answers[2] = c / q;
-    def hit(self, ray):
+        return answers
+
+    def hit(self, ray, distance):
         """ We need origin of the ray, direction of the ray, and center of
             sphere.
         """
         #need to add more intersection
         # move sphere to origin to make math easier
-        center_sphere = np.array(self.center)
-        center_sphere = np.subtract(center_sphere, center_sphere)
-
-        # origin of ray - self.center = new base
-
-        #np.dot(a, b)
+        center_sphere = self.center
+        L = np.subtract(ray.origin, self.center)
+        a = np.dot(ray.direction, ray.direction)
         b = 2 * np.dot(new_ray_origin, direction_ray)
 
-        c = np.dot(new_ray_origin, new_ray_origin) - (self.radius ** 2)
+        c = np.dot(L, L) - (self.radius ** 2)
+        answers = solve_quadratic(a, b, c)
+        if not answers[0]:
+            return False
+        
+        if answers[1] > answers[2]:
+            #swap values
+            temp = answers[2]
+            answers[2] = answers[1]
+            answers[1] = temp
 
-        pass
+        if answers[1] < 0:
+            answers[1] = answers[2]
+            if answers[1] < 0:
+                return False
+        
+        distance = answers[1]
+        return True
+
 
     def to_string(self):
         return "center: %s   radius:: %s" %(self.center, self.radius)

@@ -59,7 +59,7 @@ def load_plight(line_group):
     color    = [float(x) for x in line_group[1].split()]
     plight = PointLight(location, color)
     light_list.append(plight)
-    #print "PointLight created"
+    print "PointLight created"
 
 def load_plane(line_group):
     """ Reads data from source and creates a infinite plane object """
@@ -76,6 +76,7 @@ def load_sphere(line_group):
     global shape_list
     position = [float(x) for x in line_group[0].split()]
     radius = [float(x) for x in line_group[1].split()]
+    radius = radius[0]
     opacity = [float(x) for x in line_group[2].split()]
     color = [float(x) for x in line_group[3].split()]
     sphere = Sphere(position, radius, opacity, color)
