@@ -12,10 +12,12 @@
 import sys
 import util as util
 import numpy as np
+from PIL import Image
+from Ray import Ray
 
 #Black rgb
-BACKGROUND_COLOR = np.asarray(0, 0, 0)
-CAMERA_POSITION = np.asarray(0, 0, -1)
+BACKGROUND_COLOR = np.asarray([0, 0, 0])
+CAMERA_POSITION = np.asarray([0, 0, -10])
 
 arguments = len(sys.argv) - 1
 if arguments != 3:
@@ -24,8 +26,8 @@ if arguments != 3:
 
 
 """ set command line args to vars """
-image_width = sys.argv[1]
-image_height = sys.argv[2]
+image_width = int(sys.argv[1])
+image_height = int(sys.argv[2])
 sourcefile = sys.argv[3]
 
 # parse file and load up objects in obj_list and light_list
@@ -40,7 +42,31 @@ print "Light list :: " + str(light_list)
 #define window whose surface is covered with pixels
 # basically an array of (r, g, b) values, may need map to world function
 rgb = np.asarray([0, 0, 0])
-pixels = np.full((image_width, image_height), rgb)
+
+#pixels = np.zeros([image_width, image_height, 3], dtype = np.uint8)
+pixels = Image.new("RGB", (image_width, image_height))
+#pixels = []
+
+#for i in range(0, image_width):
+#    temprow = []
+#    for j in range(0, image_height):
+#        temprow.append([0, 0, 0])
+#    pixels.append(temprow)
+
+def map_pixel_to_world(x, y):
+    # map pixel to world coordinates
+    map_to_world = np.asarray([0.0, 0.0, 0.0])
+    map_to_world[0] = float(x / (image_width - 1) * image_width)
+    map_to_world[0] -= float(map_to_world[0] / 2.0)
+
+    map_to_world[1] = float(x / (image_height - 1) * image_height)
+    map_to_world[1] -= float(map_to_world[1] / 2.0)
+
+    map_to_world[2] = 0.0
+    return np.asarray(map_to_world)
+
+    #def trace(ray
+
 """
 for each pixel
     shoot a ray towards the objects from the center of the pixel
@@ -53,19 +79,31 @@ for each pixel
     set the pixel color to black
 """
 def render():
-    for j in image_height:
-        for i in image_width:
+    # distance from ray origin to hitpoint
+    distance = 0.0
+    for y in range(image_height):
+        for x in range(image_width):
+            #ray = Ray(CAMERA_POSITION, np.subtract(map_pixel_to_world(i, j), CAMERA_POSITION))
+            ray = Ray(CAMERA_POSITION, np.subtract(map_pixel_to_world(x, y), CAMERA_POSITION)) # still need to normalize vector
             for shape in shape_list:
                 # build primary ray
                 # does it intersect with any objects
-                ray = Ray(CAMERA_POSITION, np.subtract(np.asarray([i, j, 0]), CAMERA_POSITION))
-                if shape.hit(ray):
+                distance = shape.hit(ray)
+                if distance != None: # and object is closest
                     #set pixel point to color of sphere
-                    pixels[j * image_width + i] = shape.color
-
+                    #pixels[i][j] = shape.color
+                    pixels.putpixel((y, x), (int(shape.color[0]), int(shape.color[1]), int(shape.color[2])))
+                    print "hit---------------"
+                    print shape.to_string()
+                    print "x:: %d, y:: %d " % (x, y)
+                    print shape.color
+                    print "distance :: %f" % distance
                 else:
-                    pixels[j * image_width + i] = BACKGROUND_COLOR
-
-    write_image(pixels)
+                    #print j * image_width + i
+                    #pixels[j * image_width + i - 1] = BACKGROUND_COLOR
+                    pixels.putpixel((y, (image_width - 1) - x), (0, 0, 0))#(BACKGROUND_COLOR))
+                    #pixels[i][j] = BACKGROUND_COLOR
+    util.write_image(pixels)
 
 render()
+

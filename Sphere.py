@@ -1,32 +1,46 @@
 # Sphere.py
 """ Class models a sphere shape. """
 import numpy as np
+import math
+import util
 
 class Sphere(object):
 
     def __init__(self, center, radius, opacity, color):
-        self.center  = center
+        print "------------Sphere----------"
+        print center
+        print radius
+        self.center  = np.asarray(center)
         self.radius  = radius
         self.opacity = opacity
-        self.color   = color
+        self.color   = np.asarray(color)
+        self.radius_squared = float(self.radius * self.radius)
+
+    def get_surface_normal(self, point):
+        surface = np.subtract(np.asarray(point), self.center)
+        #still need to normalize and return
+        return util.normalize(surface)
 
     def hit(self, ray):
         """ We need origin of the ray, direction of the ray, and center of
             sphere.
+            Should return the distance the ray has traveled to hit the sphere,
+            and 'None' otherwise
         """
         #need to add more intersection
         # move sphere to origin to make math easier
-        center_sphere = np.array(self.center)
-        center_sphere = np.subtract(center_sphere, center_sphere)
-
-        # origin of ray - self.center = new base
-
-        #np.dot(a, b)
-        b = 2 * np.dot(new_ray_origin, direction_ray)
-
-        c = np.dot(new_ray_origin, new_ray_origin) - (self.radius ** 2)
-
-        pass
+        sphere_to_ray = np.subtract(ray.origin, self.center)
+        b = 2 * np.dot(ray.direction, sphere_to_ray)
+        c = np.dot(sphere_to_ray, sphere_to_ray) - self.radius_squared
+        discr_t = (b ** 2) - (4 * c)
+        
+        #print "discriminant::" 
+        #print discr_t
+        if discr_t >= 0:
+            dist = (-b - math.sqrt(discr_t)) / 2
+            if dist > 0:
+                return dist
+        return None
 
     def to_string(self):
         return "center: %s   radius:: %s" %(self.center, self.radius)
