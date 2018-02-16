@@ -2,6 +2,7 @@
 """ Class models a sphere shape. """
 import numpy as np
 import math
+import util
 
 class Sphere(object):
 
@@ -15,58 +16,31 @@ class Sphere(object):
         self.color   = np.asarray(color)
         self.radius_squared = float(self.radius * self.radius)
 
-    def solve_quadratic(self, a, b, c):
-        answers = []
-        discriminant = b * b - 4 * a * c
-        if discriminant < 0:
-            answers.append(False)
-            return answers
-        elif discriminant == 0:
-            answers.append(True)
-            answers.append(-0.5 * b / a)
-            answers.append(answers[1])
-            return answers
-        else:
-            q = 0.0
-            if b > 0:
-                q = -0.5 * (b + math.sqrt(discriminant))
-            elif b < 0:
-                q = -0.5 * (b - math.sqrt(discriminant))
-            answers.append(True)
-            answers.append(q / a);
-            answers.append(c / q);
-        return answers
+    def get_surface_normal(self, point):
+        surface = np.subtract(np.asarray(point), self.center)
+        #still need to normalize and return
+        return util.normalize(surface)
 
-    def hit(self, ray, distance):
+    def hit(self, ray):
         """ We need origin of the ray, direction of the ray, and center of
             sphere.
+            Should return the distance the ray has traveled to hit the sphere,
+            and 'None' otherwise
         """
         #need to add more intersection
         # move sphere to origin to make math easier
-        center_sphere = self.center
-        L = np.subtract(ray.origin, self.center)
-        a = np.dot(ray.direction, ray.direction)
-        b = 2 * np.dot(ray.direction, L)
-
-        c = np.dot(L, L) - (self.radius ** 2)
-        answers = self.solve_quadratic(a, b, c)
-        if not answers[0]:
-            return False
+        sphere_to_ray = np.subtract(ray.origin, self.center)
+        b = 2 * np.dot(ray.direction, sphere_to_ray)
+        c = np.dot(sphere_to_ray, sphere_to_ray) - self.radius_squared
+        discr_t = (b ** 2) - (4 * c)
         
-        if answers[1] > answers[2]:
-            #swap values
-            temp = answers[2]
-            answers[2] = answers[1]
-            answers[1] = temp
-
-        if answers[1] < 0:
-            answers[1] = answers[2]
-            if answers[1] < 0:
-                return False
-        
-        distance = answers[1]
-        return True
-
+        #print "discriminant::" 
+        #print discr_t
+        if discr_t >= 0:
+            dist = (-b - math.sqrt(discr_t)) / 2
+            if dist > 0:
+                return dist
+        return None
 
     def to_string(self):
         return "center: %s   radius:: %s" %(self.center, self.radius)

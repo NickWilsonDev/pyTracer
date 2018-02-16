@@ -3,9 +3,10 @@
 """
 from os import path
 import sys
-
+import numpy as np
 """ should be pillow version 1.1.7 """
 from PIL import Image
+#from matplotlib.pyplot as plt
 
 from Sphere import Sphere
 from PointLight import PointLight
@@ -13,6 +14,18 @@ from Plane import Plane
 
 shape_list = []
 light_list = []
+
+def norm(vector):
+    total = 0
+    for component in vector:
+        total += component ** 2
+    return math.sqrt(total)
+
+def normalize(vector):
+    new_vector = []
+    for component in vector:
+        new_vector.append(component / norm(vector))
+    return new_vector
 
 def load_file(filename):
     """ Reads source file specified in the parameter, and creates what 
@@ -87,6 +100,6 @@ def write_image(pixels):
     """Uses an NumPy array of pixels to write out an image to disk.
         Param pixels - an npArray of pixel values (R, G, B)
     """
-    image = Image.fromarray(pixels, 'RGB')
-    image.save('image.png') #may change file type later
-
+    #pixels = pixels.flatten()
+    #image = Image.fromarray(np.uint8(pixels))
+    pixels.save('image.png') #may change file type later
