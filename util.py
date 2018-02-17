@@ -34,14 +34,24 @@ def load_file(filename):
     global shape_list
     global light_list
     line_group = []
+    world_size = []
+    scene = []
     if path.isfile(filename) == False:
         sys.exit()
     else:
         input_file = open(filename, 'r')
         while True:
             line = input_file.readline()
+            # grab world size of screen
             print line
-            if "sphere" in line:
+            if "world" in line:
+                print "Grabbing world coordinate size of screen..."
+                world_size = line.split()
+                del world_size[0]
+                world_size[0] = int(world_size[0])
+                world_size[1] = int(world_size[1])
+                print "World size (%d, %d)" % (world_size[0], world_size[1])
+            elif "sphere" in line:
                 print "sphere found"
                 line_group.append(input_file.readline().splitlines()[0])
                 line_group.append(input_file.readline().splitlines()[0])
@@ -62,7 +72,9 @@ def load_file(filename):
             
             if not line:
                 break
-        scene = [shape_list, light_list]
+        scene.append(world_size)
+        scene.append(shape_list)
+        scene.append(light_list)
         return scene
 
 def load_plight(line_group):
