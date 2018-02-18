@@ -40,7 +40,7 @@ class Sphere(object):
             dist = (-b - math.sqrt(discr_t)) / 2
             if dist > 0:
                 return dist
-        return None
+        return -10
 
     def to_string(self):
         return "center: %s   radius:: %s" %(self.center, self.radius)

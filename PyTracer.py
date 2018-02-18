@@ -45,8 +45,9 @@ print "Light list :: " + str(light_list)
 rgb = np.asarray([0, 0, 0])
 
 #pixels = np.zeros([image_width, image_height, 3], dtype = np.uint8)
-pixels = Image.new("RGB", (image_width, image_height))
-#pixels = []
+#pixels = Image.new("RGB", (image_width, image_height))
+pixels = [
+    [[0.0, 0.0, 0.0] for _ in xrange(image_width)] for _ in xrange(image_height)]
 
 #for i in range(0, image_width):
 #    temprow = []
@@ -55,7 +56,6 @@ pixels = Image.new("RGB", (image_width, image_height))
 #    pixels.append(temprow)
 
 def map_pixel_to_world(x, y):
-    print "mapping pixel(%d, %d)..." % (x, y)
     #print world_screen_size
     # map screen pixel to world coordinates
     map_to_world = [0.0, 0.0, 0.0] #np.asarray([0.0, 0.0, 0.0])
@@ -93,20 +93,21 @@ def render():
                 # build primary ray
                 # does it intersect with any objects
                 distance = shape.hit(ray)
-                if distance != None:
+                if distance > 0.0:
                     #set pixel point to color of sphere
                     #pixels[i][j] = shape.color
-                    pixels.putpixel((x, y), (int(shape.color[0]), int(shape.color[1]), int(shape.color[2])))
+                    #pixels.putpixel((x, y), (int(shape.color[0]), int(shape.color[1]), int(shape.color[2])))
+                    pixels[y][x] = [int(shape.color[0]), int(shape.color[1]), int(shape.color[2])]
                     print "hit---------------"
                     print shape.to_string()
                     #print "x:: %d, y:: %d " % (x, y)
                     #print shape.color
                     print "distance :: %f" % distance
                 else:
-                    #print j * image_width + i
-                    #pixels[j * image_width + i - 1] = BACKGROUND_COLOR
-                    pixels.putpixel((x, y), (0, 0, 0))#(BACKGROUND_COLOR))
-    util.write_image(pixels)
-
+                    #print "no hit +++++++++++++"
+                    pixels[y][x] = [0, 0, 0]
+                    #pixels.putpixel((x, y), (0, 0, 0))#(BACKGROUND_COLOR))
+    #util.write_image(pixels)
+    util.write_ppm(pixels)
 render()
 

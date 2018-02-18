@@ -108,6 +108,18 @@ def load_sphere(line_group):
     shape_list.append(sphere)
     print "sphere created"
 
+def write_ppm(pixels):
+    header = "P3 {} {} 255\n".format(len(pixels[0]), len(pixels))
+    img_data_rows = []
+    for row in pixels:
+        pixel_strs = [
+            " ".join([str(int(color)) for color in pixel]) for pixel in row]
+        img_data_rows.append(" ".join(pixel_strs))
+    pixels = header + "\n".join(img_data_rows)
+
+    with open("image.ppm", "w") as img:
+        img.write(pixels)
+
 def write_image(pixels):
     """Uses an NumPy array of pixels to write out an image to disk.
         Param pixels - an npArray of pixel values (R, G, B)
