@@ -87,24 +87,25 @@ def render():
         for x in xrange(0, image_width):
             distance = 0.0
             #ray = Ray(CAMERA_POSITION, np.subtract(map_pixel_to_world(i, j), CAMERA_POSITION))
-            ray = Ray(CAMERA_POSITION, np.subtract(map_pixel_to_world(x, y), CAMERA_POSITION)) # still need to normalize vector
+            ray = Ray(CAMERA_POSITION, util.normalize(np.subtract(map_pixel_to_world(x, y), CAMERA_POSITION))) # still need to normalize vector
             closest = 250.0
             for shape in shape_list:
                 # build primary ray
                 # does it intersect with any objects
                 distance = shape.hit(ray)
-                if distance > 0.0:
+                if distance > 0.0 and distance < closest:
                     #set pixel point to color of sphere
+                    closest = distance
                     #pixels[i][j] = shape.color
                     #pixels.putpixel((x, y), (int(shape.color[0]), int(shape.color[1]), int(shape.color[2])))
                     pixels[y][x] = [int(shape.color[0]), int(shape.color[1]), int(shape.color[2])]
                     print "hit---------------"
-                    print shape.to_string()
+                    #print shape.to_string()
                     #print "x:: %d, y:: %d " % (x, y)
                     #print shape.color
-                    print "distance :: %f" % distance
+                    #print "distance :: %f" % distance
                 else:
-                    #print "no hit +++++++++++++"
+                    print "no hit +++++++++++++"
                     pixels[y][x] = [0, 0, 0]
                     #pixels.putpixel((x, y), (0, 0, 0))#(BACKGROUND_COLOR))
     #util.write_image(pixels)

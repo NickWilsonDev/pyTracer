@@ -39,6 +39,9 @@ class Sphere(object):
         if discr_t >= 0:
             dist = (-b - math.sqrt(discr_t)) / 2
             if dist > 0:
+                print "ray origin:: and direcion::"
+                print ray.origin
+                print ray.direction
                 return dist
         return -10
 

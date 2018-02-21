@@ -7,6 +7,7 @@ import numpy as np
 """ should be pillow version 1.1.7 """
 from PIL import Image
 #from matplotlib.pyplot as plt
+import math
 
 from Sphere import Sphere
 from PointLight import PointLight
