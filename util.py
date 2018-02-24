@@ -6,7 +6,6 @@ import sys
 import numpy as np
 """ should be pillow version 1.1.7 """
 from PIL import Image
-#from matplotlib.pyplot as plt
 import math
 
 from Sphere import Sphere
@@ -44,6 +43,7 @@ def load_file(filename):
         while True:
             line = input_file.readline()
             # grab world size of screen
+            line_group = []
             print line
             if "world" in line:
                 print "Grabbing world coordinate size of screen..."
@@ -59,6 +59,8 @@ def load_file(filename):
                 line_group.append(input_file.readline().splitlines()[0])
                 line_group.append(input_file.readline().splitlines()[0])
                 load_sphere(line_group)
+                
+
             elif "plane" in line:
                 print "plane found"
                 line_group.append(input_file.readline().splitlines()[0])

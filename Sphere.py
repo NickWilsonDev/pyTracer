@@ -15,6 +15,7 @@ class Sphere(object):
         self.radius_squared = float(self.radius * self.radius)
         print "center:: %s" % str(self.center)
         print "radius:: %s " % str(self.radius)
+        print "color:: %s " % str(self.color)
 
     def get_surface_normal(self, point):
         surface = np.subtract(np.asarray(point), self.center)
