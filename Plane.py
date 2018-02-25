@@ -11,12 +11,10 @@ class Plane(object):
         self.normal  = np.linalg.norm(self.normal)
 
     def hit(self, ray):
-        
-        denominator = np.dot(self.normal, 1)
+        denominator = np.dot(self.normal, ray.direction)
         if denominator > 0.0000001:
            pass
         answer = []
-        
         return None
 
     def to_string(self):

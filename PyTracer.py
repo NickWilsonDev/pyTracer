@@ -41,7 +41,7 @@ print "Shape list :: " + str(shape_list)
 print "Light list :: " + str(light_list)
 for element in shape_list:
     print element
-    print "center:: %s" % str(element.center)
+    #print "center:: %s" % str(element.center)
     print "--------------------------"
 
 #define some objects
@@ -60,7 +60,7 @@ def map_pixel_to_world(x, y):
     #print world_screen_size
     # map screen pixel to world coordinates
     map_to_world = [0.0, 0.0, 0.0] #np.asarray([0.0, 0.0, 0.0])
-    print "image_width:: %d  image_height:: %d " %(image_width, image_height)
+    #print "image_width:: %d  image_height:: %d " %(image_width, image_height)
     map_to_world[0] = float(x) / (image_width - 1) * image_width
     map_to_world[0] -= float(world_screen_size[0] / 2.0)
 
@@ -68,7 +68,7 @@ def map_pixel_to_world(x, y):
     map_to_world[1] -= float(world_screen_size[1] / 2.0)
 
     map_to_world[2] = 0.0
-    print "x:: %d y:: %d map pix to world result %s" % (x, y, str(map_to_world))
+    #print "x:: %d y:: %d map pix to world result %s" % (x, y, str(map_to_world))
     return np.asarray(map_to_world)
 
 
@@ -89,7 +89,6 @@ def render():
     for y in xrange(0, image_height):
         for x in xrange(0, image_width):
             distance = 0.0
-            #ray = Ray(CAMERA_POSITION, np.subtract(map_pixel_to_world(i, j), CAMERA_POSITION))
             norm = util.normalize(np.subtract(map_pixel_to_world(x, y), CAMERA_POSITION))
             ray = Ray(CAMERA_POSITION, norm) # still need to normalize vector
             closest = 250.0
@@ -99,19 +98,20 @@ def render():
                 distance = shape.hit(ray)
                 if distance > 0.0 and distance < closest:
                     #set pixel point to color of sphere
-                    closest = distance
+                    #closest = distance
                     #pixels[i][j] = shape.color
                     #pixels.putpixel((x, y), (int(shape.color[0]), int(shape.color[1]), int(shape.color[2])))
                     pixels[y][x] = [int(shape.color[0]), int(shape.color[1]), int(shape.color[2])]
                     print "hit++++++++++"
                     #print shape.to_string()
-                    #print "x:: %d, y:: %d " % (x, y)
-                    #print shape.color
+                    print "x:: %d, y:: %d " % (x, y)
+                    print shape.color
                     #print "distance :: %f" % distance
                 else:
-                    print "no hit ---------"
-                    pixels[y][x] = [0, 0, 0]
+                    #print "no hit ---------"
+                    pixels[y][x] = BACKGROUND_COLOR
     #util.write_image(pixels)
+    print "pixels:: %s" % (str(pixels))
     util.write_ppm(pixels)
 render()
 

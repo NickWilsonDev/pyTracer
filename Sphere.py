@@ -46,7 +46,7 @@ class Sphere(object):
                 return dist
         return -10
         """
-        print "calculating for ray origin: %s  ray direction:: %s" %(str(tuple(ray.origin)), str(tuple(ray.direction)))
+        #print "calculating for ray origin: %s  ray direction:: %s" %(str(tuple(ray.origin)), str(tuple(ray.direction)))
         newSphereCenter = np.subtract(self.center, self.center)
         new_base = np.subtract(self.center, ray.origin)
         a = np.dot(ray.direction, ray.direction)
